@@ -1,0 +1,5 @@
+python-telegram-bot
+staticmap
+googletrans
+iexfinance
+matplotlib
