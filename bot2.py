@@ -1,23 +1,29 @@
 import datetime
 
-import telegram
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
+from telegram.ext import Updater, CommandHandler
 
 
-def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Hola!")
+def start(update, context):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Usa /help per veure les comandes disponibles.")
 
-def help(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Soc un bot amb comandes /start, /help i /hora.")
 
-def hora(bot, update):
+def help(update, context):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Soc un bot amb comandes /start, /help i /hora.")
+
+
+def hora(update, context):
     missatge = str(datetime.datetime.now())
-    bot.send_message(chat_id=update.message.chat_id, text=missatge)
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=missatge)
 
 
 TOKEN = open('token.txt').read().strip()
-updater = Updater(token=TOKEN)
+updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 dispatcher.add_handler(CommandHandler('start', start))

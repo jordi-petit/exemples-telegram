@@ -1,23 +1,26 @@
 from googletrans import Translator
 
-import telegram
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
+from telegram.ext import Updater, CommandHandler
 
 
-def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="Hola! Soc un bot traductor.")
+def start(update, context):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Hola! Soc un bot traductor. Usa /trad text.")
 
 
-def trad(bot, update):
-    translator = Translator()
-    miss_orig = update.message.text[6:] # esborra el "/trad " del començament del missatge
+def trad(update, context):
+    miss_orig = update.message.text[6:]  # esborra el "/trad " del començament del missatge
     miss_trad = translator.translate(miss_orig).text
-    bot.send_message(chat_id=update.message.chat_id, text=miss_trad)
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=miss_trad)
 
+
+translator = Translator()
 
 TOKEN = open('token.txt').read().strip()
-updater = Updater(token=TOKEN)
+updater = Updater(token=TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 dispatcher.add_handler(CommandHandler('start', start))
